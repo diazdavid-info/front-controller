@@ -7,6 +7,13 @@
     "phpunit/phpunit": "^4.8",
     "fabpot/php-cs-fixer": "^1.10"
   },
+  "autoload": {
+    "psr-4": {
+      "Test\\": "tests/",
+      "Fake\\": "tests/fakes",
+      "FrontController\\FrontController\\": "src/"
+    }
+  },
   "authors": [
     {
       "name": "David Díaz",
