@@ -1,0 +1,16 @@
+{
+  "name": "daviddiaz/front-controller",
+  "description": "Front controller module",
+  "require": {
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8",
+    "fabpot/php-cs-fixer": "^1.10"
+  },
+  "authors": [
+    {
+      "name": "David Díaz",
+      "email": "diazdavid.info@gmail.com"
+    }
+  ]
+}
