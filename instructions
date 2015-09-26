@@ -1,0 +1,23 @@
+RESUMEN:
+Se necesita un módulo que reciba las peticiones de un usuario y llame al método de un controlador en función de la url.
+El módulo será parametrizado desde un array de configuración. En ese array se le indicará las rutas de la url posibles
+y a que controlador y método a de llamar. Se le inyectará a los métodos las clases que se indiquen en el array de
+configuración y los posibles parámetros que vengan en la url. Todas las inyeciones se le indicarán en el array de
+configuración. En el caso de que una ruta no se encuentre la aplicación levantará una excepción o llamará a un
+método de una clase que se expecifique como default.
+
+
+REQUISITOS:
+** El frontController llama al método index de la clase FakeController recibiendo el path de la URL
+** El frontController llama al método y clase expecificado en la configuración recibiendo el path de la URL
+** El frontController llama al método y clase por defecto cuando el path no existe recibiendo el path de la URL.
+** El frontController levanta una excepción si no existe método y clase por defecto.
+
+
+** El frontController inyecta la implementación de una interfaz cuando se expecifica en la configuración.
+** Si la implementación de la inyeción no existe levanta una excepción.
+** El frontController no inyectará la clase si el método no lo espera
+
+
+** El frontController inyecta los parametros que se reciban en la URL.
+** Si el método no espera parámetros no se inyectarán.
