@@ -8,8 +8,7 @@ método de una clase que se expecifique como default.
 
 
 REQUISITOS:
-** El frontController llama al método index de la clase FakeController recibiendo el path de la URL
-** El frontController llama al método y clase expecificado en la configuración recibiendo el path de la URL
+// El frontController llama al método y clase expecificado en la configuración recibiendo el path de la URL
 ** El frontController llama al método y clase por defecto cuando el path no existe recibiendo el path de la URL.
 ** El frontController levanta una excepción si no existe método y clase por defecto.
 
