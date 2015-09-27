@@ -12,9 +12,14 @@ namespace Fake;
 class FakeController
 {
 
+    public function add()
+    {
+        return "Hello from method add class FakeController";
+    }
+
     public function index()
     {
-        return "Hello";
+        return "Default";
     }
 
 }
