@@ -11,7 +11,9 @@
     "psr-4": {
       "Test\\": "tests/",
       "Fake\\": "tests/fakes",
-      "FrontController\\FrontController\\": "src/"
+      "FrontController\\FrontController\\": "src/",
+      "FrontController\\Reader\\": "src/readers",
+      "FrontController\\Exception\\": "src/exceptions"
     }
   },
   "authors": [
