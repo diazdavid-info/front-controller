@@ -56,4 +56,46 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
         $reader->getMethod('/');
     }
 
+    /**
+     * Test:    get class
+     * Given:   path url
+     * Return:  name class
+     * When:    the class is specified in array config
+     */
+    public function testGetClassGivenPathUrlReturnNameClassWhenTheClassIsSpecifiedInArrayConfig()
+    {
+        $arrayConfiguration = ['router' => ['/' => 'add@Fake\FakeController']];
+        $reader = new ReaderArrayConfiguration($arrayConfiguration);
+        $class = $reader->getClass('/');
+        $this->assertTrue($class == 'Fake\FakeController');
+    }
+
+    /**
+     * Test:    get class default
+     * Given:   path url
+     * Return:  name class default
+     * When:    the class is not specified in array config
+     */
+    public function testGetClassDefaultGivenPathUrlReturnNameClassDefaultWhenTheClassIsNotSpecifiedInArrayConfig()
+    {
+        $arrayConfiguration = ['router' => ['/' => 'add@Fake\FakeController'], 'default' => 'index@Fake\FakeDefaultController'];
+        $reader = new ReaderArrayConfiguration($arrayConfiguration);
+        $classDefault = $reader->getClass('/add');
+        $this->assertTrue($classDefault == 'Fake\FakeDefaultController');
+    }
+
+    /**
+     * Test:    throw exception
+     * Given:   path url
+     * Return:  throw Exception
+     * When:    the class and class default are not in array config
+     * @expectedException \FrontController\Exception\ClassNotFoundException
+     */
+    public function testThrowExceptionGivenPathUrlReturnThrowExceptionWhenTheClassAndClasDefaultAreNotSpecifiedInArrayConfig()
+    {
+        $arrayConfiguration = ['router' => []];
+        $reader = new ReaderArrayConfiguration($arrayConfiguration);
+        $reader->getClass('/');
+    }
+
 }
