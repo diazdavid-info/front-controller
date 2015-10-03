@@ -8,34 +8,33 @@
 
 namespace FrontController\FrontController;
 
-use Fake\FakeController;
+use FrontController\Reader\ReaderConfiguration;
 
 class FrontController
 {
     /**
-     * @var array
+     * @var ReaderConfiguration
      */
-    private $_arrayConfiguration = [];
+    private $_readerConfiguration;
 
     /**
      * FrontController constructor.
-     * @param array $_arrayConfiguration
+     * @param ReaderConfiguration $readerConfiguration
      */
-    public function __construct(array $_arrayConfiguration)
+    public function __construct(ReaderConfiguration $readerConfiguration)
     {
-        $this->_arrayConfiguration = $_arrayConfiguration;
+        $this->_readerConfiguration = $readerConfiguration;
     }
 
-
+    /**
+     * @param string $pathUrl
+     * @return string
+     */
     public function init($pathUrl)
     {
-        $methodAndClass = explode('@', $this->_arrayConfiguration['router'][$pathUrl]);
-        if(empty($methodAndClass[1])) {
-            $methodAndClass = explode('@', $this->_arrayConfiguration['default']);
-            $controller = new $methodAndClass[1]();
-            return $controller->$methodAndClass[0]();
-        }
-        $controller = new $methodAndClass[1]();
-        return $controller->$methodAndClass[0]();
+        $class = $this->_readerConfiguration->getClass($pathUrl);
+        $method = $this->_readerConfiguration->getMethod($pathUrl);
+        $controller = new $class();
+        return $controller->$method();
     }
 }

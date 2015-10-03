@@ -16,4 +16,10 @@ interface ReaderConfiguration
      * @return string
      */
     public function getMethod($pathUrl);
+
+    /**
+     * @param $pathUrl
+     * @return mixed
+     */
+    public function getClass($pathUrl);
 }
