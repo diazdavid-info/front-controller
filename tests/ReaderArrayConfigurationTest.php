@@ -91,11 +91,57 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      * When:    the class and class default are not in array config
      * @expectedException \FrontController\Exception\ClassNotFoundException
      */
-    public function testThrowExceptionGivenPathUrlReturnThrowExceptionWhenTheClassAndClasDefaultAreNotSpecifiedInArrayConfig()
+    public function testThrowExceptionGivenPathUrlReturnThrowExceptionWhenTheClassAndClassDefaultAreNotSpecifiedInArrayConfig()
     {
         $arrayConfiguration = ['router' => []];
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $reader->getClass('/');
+    }
+
+    /**
+     * Test:    get parameters
+     * Given:   path url
+     * Return:  empty array
+     * When:    there are not parameters in path
+     */
+    public function testGetParametersGivenPathUrlReturnEmptyArrayWhenThereAreNotParametersInPath()
+    {
+        $arrayConfiguration = ['router' => [
+            '/teacher' => 'add@Fake\FakeController',
+            '/param/{id}' => 'add@Fake\FakeController:id',]];
+
+        $reader = new ReaderArrayConfiguration($arrayConfiguration);
+        $parameters = $reader->getParameters('/teacher');
+        $this->assertTrue($parameters == []);
+        $parameters = $reader->getParameters('/param');
+        $this->assertTrue($parameters == []);
+    }
+
+    /**
+     * Test:    get parameters
+     * Given:   path url
+     * Return:  array key value with parameters
+     * When:    there are parameters in path
+     */
+    public function testGetParametersGivenPathUrlReturnArrayKeyValueWhenThereAreParametersInPath()
+    {
+        $arrayConfiguration = ['router' => [
+            '/param/{id}' => 'add@Fake\FakeController:id',
+            '/user/{idUser}' => 'add@Fake\FakeController:idUser',
+            '/school/{idSchool}/name/{nameSchool}' => 'add@Fake\FakeController:idSchool:nameSchool',
+            '/school/{idSchool}/class/{idClass}/module/{idModule}/{idCicle}' => 'add@Fake\FakeController:idSchool:idClass:idModule:idCicle']];
+
+        $reader = new ReaderArrayConfiguration($arrayConfiguration);
+        $parameters = $reader->getParameters('/param/1');
+        $this->assertTrue($parameters == ['id' => '1']);
+        $parameters = $reader->getParameters('/user/10');
+        $this->assertTrue($parameters == ['idUser' => '10']);
+        $parameters = $reader->getParameters('/school/10/name/clara-del-rey');
+        $this->assertTrue($parameters == ['idSchool' => '10', 'nameSchool' => 'clara-del-rey']);
+        $parameters = $reader->getParameters('/school/10/name/clara-del-rey');
+        $this->assertTrue($parameters == ['idSchool' => '10', 'nameSchool' => 'clara-del-rey']);
+        $parameters = $reader->getParameters('/school/10/class/i5/module/dam/2b');
+        $this->assertTrue($parameters == ['idSchool' => '10', 'idClass' => 'i5', 'idModule' => 'dam', 'idCicle' => '2b']);
     }
 
 }
