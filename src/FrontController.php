@@ -32,9 +32,9 @@ class FrontController
      */
     public function init($pathUrl)
     {
-        $class = $this->_readerConfiguration->getClass($pathUrl);
-        $method = $this->_readerConfiguration->getMethod($pathUrl);
-        $controller = new $class();
-        return $controller->$method();
+        $class = new \ReflectionClass($this->_readerConfiguration->getClass($pathUrl));
+        $instance = $class->newInstance();
+        $method = $class->getMethod($this->_readerConfiguration->getMethod($pathUrl));
+        return $method->invokeArgs($instance, $this->_readerConfiguration->getParameters($pathUrl));
     }
 }

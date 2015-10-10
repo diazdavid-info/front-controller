@@ -22,4 +22,14 @@ class FakeController
         return "Default";
     }
 
+    public function param($id)
+    {
+        return "param: " . $id;
+    }
+
+    public function params($id, $idSchool)
+    {
+        return "params: " . $id . ", " . $idSchool;
+    }
+
 }

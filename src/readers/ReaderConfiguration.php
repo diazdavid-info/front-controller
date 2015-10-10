@@ -18,8 +18,14 @@ interface ReaderConfiguration
     public function getMethod($pathUrl);
 
     /**
-     * @param $pathUrl
-     * @return mixed
+     * @param string $pathUrl
+     * @return string
      */
     public function getClass($pathUrl);
+
+    /**
+     * @param string $pathUrl
+     * @return array
+     */
+    public function getParameters($pathUrl);
 }
