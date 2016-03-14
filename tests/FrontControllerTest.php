@@ -6,12 +6,11 @@
  * Time: 10:54
  */
 
-namespace Test;
+namespace frontController\test;
 
-
-use FrontController\Exception\ClassNotFoundException;
-use FrontController\Exception\MethodNotFoundException;
-use FrontController\FrontController\FrontController;
+use frontController\exceptions\ClassNotFoundException;
+use frontController\exceptions\MethodNotFoundException;
+use frontController\FrontController;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class FrontControllerTest extends \PHPUnit_Framework_TestCase
@@ -24,9 +23,9 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCallSpecificMethodAndClassGivenPathUrlReturnHelloWhenAlways()
     {
-        $arrayConfiguration = ['router' => ['/' => 'add@Fake\FakeController'], 'default' => 'index@Fake\FakeController'];
+        $arrayConfiguration = ['router' => ['/' => 'add@frontController\test\fakes\FakeController'], 'default' => 'index@frontController\test\fakes\FakeController'];
 
-        $mock = $this->createMock($arrayConfiguration, 'Fake\FakeController', 'add', []);
+        $mock = $this->createMock($arrayConfiguration, 'frontController\test\fakes\FakeController', 'add', []);
 
         $frontController = new FrontController($mock);
         $result = $frontController->init('/');
@@ -42,7 +41,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
      */
     private function createMock($arrayConfiguration, $class, $method, array $parameters)
     {
-        $mock = $this->getMockBuilder('FrontController\Reader\ReaderConfiguration')
+        $mock = $this->getMockBuilder('frontController\readers\ReaderConfiguration')
             ->setConstructorArgs([$arrayConfiguration])->getMock();
         $mock->method('getClass')->will($this->returnValue($class));
         $mock->method('getMethod')->will($this->returnValue($method));
@@ -58,9 +57,9 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCallDefaultMethodAndClassGivenPathUrlAndAReturnDefaultWhenNotExistConfig()
     {
-        $arrayConfiguration = ['router' => ['/' => 'add@Fake\FakeController'], 'default' => 'index@Fake\FakeController'];
+        $arrayConfiguration = ['router' => ['/' => 'add@frontController\test\fakes\FakeController'], 'default' => 'index@frontController\test\fakes\FakeController'];
 
-        $mock = $this->createMock($arrayConfiguration, 'Fake\FakeController', 'index', []);
+        $mock = $this->createMock($arrayConfiguration, 'frontController\test\fakes\FakeController', 'index', []);
 
         $frontController = new FrontController($mock);
         $result = $frontController->init('/a');
@@ -72,13 +71,13 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
      * Given:   Path URL
      * Return:  Throw ClassNotFoundException
      * When:    Not exist class and default class
-     * @expectedException \FrontController\Exception\ClassNotFoundException
+     * @expectedException \frontController\exceptions\ClassNotFoundException
      */
     public function testThrowExceptionGivenPathUrlReturnThrowExceptionWhenNotExistClassAndNotExistDefaultClass()
     {
         $arrayConfiguration = ['router' => ['/' => 'add@Fake\FakeController2']];
 
-        $mock = $this->getMockBuilder('FrontController\Reader\ReaderConfiguration')
+        $mock = $this->getMockBuilder('frontController\readers\ReaderConfiguration')
             ->setConstructorArgs([$arrayConfiguration])->getMock();
         $mock->method('getClass')->will($this->throwException(new ClassNotFoundException()));
         $mock->method('getMethod')->will($this->returnValue('add'));
@@ -93,15 +92,15 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
      * Given:   Path URL
      * Return:  Throw ClassNotFoundException
      * When:    Not exist method and default method
-     * @expectedException \FrontController\Exception\MethodNotFoundException
+     * @expectedException \frontController\exceptions\MethodNotFoundException
      */
     public function testThrowExceptionGivenPathUrlReturnThrowExceptionWhenNotExistMethodAndNotExistDefaultMethod()
     {
-        $arrayConfiguration = ['router' => ['/' => 'add2@Fake\FakeController']];
+        $arrayConfiguration = ['router' => ['/' => 'add2@frontController\test\fakes\FakeController']];
 
-        $mock = $this->getMockBuilder('FrontController\Reader\ReaderConfiguration')
+        $mock = $this->getMockBuilder('frontController\readers\ReaderConfiguration')
             ->setConstructorArgs([$arrayConfiguration])->getMock();
-        $mock->method('getClass')->will($this->returnValue('Fake\FakeController'));
+        $mock->method('getClass')->will($this->returnValue('frontController\test\fakes\FakeController'));
         $mock->method('getMethod')->will($this->throwException(new MethodNotFoundException()));
         $mock->method('getParameters')->will($this->returnValue([]));
 
@@ -117,9 +116,9 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetParametersGivenPathUrlReturnParameterWhenExistParameterInPathUrl()
     {
-        $arrayConfiguration = ['router' => ['/{id}' => 'param@Fake\FakeController:id']];
+        $arrayConfiguration = ['router' => ['/{id}' => 'param@frontController\test\fakes\FakeController:id']];
 
-        $mock = $this->createMock($arrayConfiguration, 'Fake\FakeController', 'param', ['id' => 2]);
+        $mock = $this->createMock($arrayConfiguration, 'frontController\test\fakes\FakeController', 'param', ['id' => 2]);
 
         $frontController = new FrontController($mock);
         $result = $frontController->init('/2');
@@ -134,9 +133,9 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetParametersGivenPathUrlReturnListParametersWhenExistParametersInPathUrl()
     {
-        $arrayConfiguration = ['router' => ['/{id}/school/{idSchool}' => 'params@Fake\FakeController:id:idSchool']];
+        $arrayConfiguration = ['router' => ['/{id}/school/{idSchool}' => 'params@frontController\test\fakes\FakeController:id:idSchool']];
 
-        $mock = $this->createMock($arrayConfiguration, 'Fake\FakeController', 'params', ['id' => 2, 'idSchool' => 4]);
+        $mock = $this->createMock($arrayConfiguration, 'frontController\test\fakes\FakeController', 'params', ['id' => 2, 'idSchool' => 4]);
 
         $frontController = new FrontController($mock);
         $result = $frontController->init('/2/school/4');

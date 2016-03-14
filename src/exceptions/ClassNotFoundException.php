@@ -6,12 +6,11 @@
  * Time: 20:39
  */
 
-namespace FrontController\Exception;
-
+namespace frontController\exceptions;
 
 use Exception;
 
-class ClassNotFoundException extends \Exception
+class ClassNotFoundException extends Exception
 {
     /**
      * @param string $message

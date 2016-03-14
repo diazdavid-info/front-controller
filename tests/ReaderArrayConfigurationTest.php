@@ -9,7 +9,7 @@
 namespace Fake;
 
 
-use FrontController\Reader\ReaderArrayConfiguration;
+use frontController\readers\ReaderArrayConfiguration;
 
 class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethodGivenPathUrlReturnNameMethodWhenTheMethodIsSpecifiedInArrayConfig()
     {
-        $arrayConfiguration = ['router' => ['/' => 'add@Fake\FakeController']];
+        $arrayConfiguration = ['router' => ['/' => 'add@frontController\test\fakes\FakeController']];
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $method = $reader->getMethod('/');
         $this->assertTrue($method === 'add');
@@ -36,7 +36,7 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethodDefaultGivenPathUrlReturnNameMethodDefaultWhenTheMethodIsNotSpecifiedInArrayConfig()
     {
-        $arrayConfiguration = ['router' => ['/' => 'add@Fake\FakeController'], 'default' => 'index@Fake\FakeController'];
+        $arrayConfiguration = ['router' => ['/' => 'add@frontController\test\fakes\FakeController'], 'default' => 'index@frontController\test\fakes\FakeController'];
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $methodDefault = $reader->getMethod('/add');
         $this->assertTrue($methodDefault === 'index');
@@ -47,7 +47,7 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      * Given:   path url
      * Return:  Throw Exception
      * When:    the method and method default are not in array config
-     * @expectedException \FrontController\Exception\MethodNotFoundException
+     * @expectedException \frontController\exceptions\MethodNotFoundException
      */
     public function testThrowExceptionGivenPathUrlReturnThrowExceptionWhenTheMethodAndMethodDefaultAreNotSpecifiedInArrayConfig()
     {
@@ -64,10 +64,10 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetClassGivenPathUrlReturnNameClassWhenTheClassIsSpecifiedInArrayConfig()
     {
-        $arrayConfiguration = ['router' => ['/' => 'add@Fake\FakeController']];
+        $arrayConfiguration = ['router' => ['/' => 'add@frontController\test\fakes\FakeController']];
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $class = $reader->getClass('/');
-        $this->assertTrue($class == 'Fake\FakeController');
+        $this->assertTrue($class == 'frontController\test\fakes\FakeController');
     }
 
     /**
@@ -78,7 +78,7 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetClassDefaultGivenPathUrlReturnNameClassDefaultWhenTheClassIsNotSpecifiedInArrayConfig()
     {
-        $arrayConfiguration = ['router' => ['/' => 'add@Fake\FakeController'], 'default' => 'index@Fake\FakeDefaultController'];
+        $arrayConfiguration = ['router' => ['/' => 'add@frontController\test\fakes\FakeController'], 'default' => 'index@Fake\FakeDefaultController'];
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $classDefault = $reader->getClass('/add');
         $this->assertTrue($classDefault == 'Fake\FakeDefaultController');
@@ -89,7 +89,7 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      * Given:   path url
      * Return:  throw Exception
      * When:    the class and class default are not in array config
-     * @expectedException \FrontController\Exception\ClassNotFoundException
+     * @expectedException \frontController\exceptions\ClassNotFoundException
      */
     public function testThrowExceptionGivenPathUrlReturnThrowExceptionWhenTheClassAndClassDefaultAreNotSpecifiedInArrayConfig()
     {
@@ -107,8 +107,8 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testGetParametersGivenPathUrlReturnEmptyArrayWhenThereAreNotParametersInPath()
     {
         $arrayConfiguration = ['router' => [
-            '/teacher' => 'add@Fake\FakeController',
-            '/param/{id}' => 'add@Fake\FakeController:id',]];
+            '/teacher' => 'add@frontController\test\fakes\FakeController',
+            '/param/{id}' => 'add@frontController\test\fakes\FakeController:id',]];
 
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $parameters = $reader->getParameters('/teacher');
@@ -126,10 +126,10 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testGetParametersGivenPathUrlReturnArrayKeyValueWhenThereAreParametersInPath()
     {
         $arrayConfiguration = ['router' => [
-            '/param/{id}' => 'add@Fake\FakeController:id',
-            '/user/{idUser}' => 'add@Fake\FakeController:idUser',
-            '/school/{idSchool}/name/{nameSchool}' => 'add@Fake\FakeController:idSchool:nameSchool',
-            '/school/{idSchool}/class/{idClass}/module/{idModule}/{idCicle}' => 'add@Fake\FakeController:idSchool:idClass:idModule:idCicle']];
+            '/param/{id}' => 'add@frontController\test\fakes\FakeController:id',
+            '/user/{idUser}' => 'add@frontController\test\fakes\FakeController:idUser',
+            '/school/{idSchool}/name/{nameSchool}' => 'add@frontController\test\fakes\FakeController:idSchool:nameSchool',
+            '/school/{idSchool}/class/{idClass}/module/{idModule}/{idCicle}' => 'add@frontController\test\fakes\FakeController:idSchool:idClass:idModule:idCicle']];
 
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $parameters = $reader->getParameters('/param/1');

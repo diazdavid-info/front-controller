@@ -6,12 +6,11 @@
  * Time: 11:06
  */
 
-namespace FrontController\Exception;
-
+namespace frontController\exceptions;
 
 use Exception;
 
-class MethodNotFoundException extends \Exception
+class MethodNotFoundException extends Exception
 {
     /**
      * @param string $message

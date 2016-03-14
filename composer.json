@@ -1,5 +1,5 @@
 {
-  "name": "daviddiaz/front-controller",
+  "name": "diazdavid-info/front-controller",
   "description": "Front controller module",
   "require": {
   },
@@ -9,11 +9,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Test\\": "tests/",
-      "Fake\\": "tests/fakes",
-      "FrontController\\FrontController\\": "src/",
-      "FrontController\\Reader\\": "src/readers",
-      "FrontController\\Exception\\": "src/exceptions"
+      "frontController\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "frontController\\test\\": "tests/"
     }
   },
   "authors": [

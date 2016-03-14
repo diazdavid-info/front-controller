@@ -6,7 +6,7 @@
  * Time: 11:20
  */
 
-namespace Fake;
+namespace frontController\test\fakes;
 
 
 class FakeController

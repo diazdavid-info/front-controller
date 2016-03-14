@@ -7,11 +7,10 @@
  * Time: 10:41
  */
 
-namespace FrontController\Reader;
+namespace frontController\readers;
 
-
-use FrontController\Exception\ClassNotFoundException;
-use FrontController\Exception\MethodNotFoundException;
+use frontController\exceptions\ClassNotFoundException;
+use frontController\exceptions\MethodNotFoundException;
 
 class ReaderArrayConfiguration implements ReaderConfiguration
 {

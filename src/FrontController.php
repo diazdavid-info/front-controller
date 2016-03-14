@@ -6,9 +6,9 @@
  * Time: 11:26
  */
 
-namespace FrontController\FrontController;
+namespace frontController;
 
-use FrontController\Reader\ReaderConfiguration;
+use frontController\readers\ReaderConfiguration;
 
 class FrontController
 {

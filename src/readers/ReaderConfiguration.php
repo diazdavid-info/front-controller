@@ -6,8 +6,7 @@
  * Time: 10:41
  */
 
-namespace FrontController\Reader;
-
+namespace frontController\readers;
 
 interface ReaderConfiguration
 {
