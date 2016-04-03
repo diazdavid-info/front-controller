@@ -22,10 +22,18 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethodGivenPathUrlReturnNameMethodWhenTheMethodIsSpecifiedInArrayConfig()
     {
-        $arrayConfiguration = ['router' => ['/' => 'add@frontController\test\fakes\FakeController']];
+        $arrayConfiguration = ['router' =>
+            [
+                '/' => 'add@frontController\test\fakes\FakeController',
+                '/test/{id}' => 'test2@frontController\test\fakes\FakeController:id',
+            ]
+        ];
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $method = $reader->getMethod('/');
         $this->assertTrue($method === 'add');
+
+        $method = $reader->getMethod('/test/12');
+        $this->assertTrue($method === 'test2');
     }
 
     /**

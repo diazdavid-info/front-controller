@@ -89,17 +89,42 @@ class ReaderArrayConfiguration implements ReaderConfiguration
      */
     private function readMethod($pathUrl)
     {
-        $methodAndClass = $this->cutRouter($pathUrl);
-        return $methodAndClass[0];
+        $methodAndClass = array();
+        foreach ($this->_configurations['router'] as $router => $value) {
+            $this->_explodeRouter = explode('/', $router);
+            $this->_explodePathUrl = explode('/', $pathUrl);
+
+            $result = $this->mergeRouterAndPath();
+
+            if ($this->_explodeRouter == $result) {
+                $methodAndClass = explode('@', $value);
+            }
+        }
+        return empty($methodAndClass[0]) ? null : $methodAndClass[0];
     }
 
     /**
-     * @param $pathUrl
      * @return array
      */
-    private function cutRouter($pathUrl)
+    private function mergeRouterAndPath()
     {
-        return empty($this->_configurations['router'][$pathUrl]) ? null : explode('@', $this->_configurations['router'][$pathUrl]);
+        $result = array();
+
+        if (count($this->_explodePathUrl) == count($this->_explodeRouter)) {
+            $result = array_filter($this->_explodeRouter, function ($value, $key) {
+                return ($this->_explodePathUrl[$key] === $this->_explodeRouter[$key] || $this->isParameter($this->_explodeRouter[$key]));
+            }, ARRAY_FILTER_USE_BOTH);
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $parameter
+     * @return int
+     */
+    private function isParameter($parameter)
+    {
+        return preg_match('/{\w+}/', $parameter);
     }
 
     /**
@@ -122,6 +147,15 @@ class ReaderArrayConfiguration implements ReaderConfiguration
     {
         $methodAndClass = $this->cutRouter($pathUrl);
         return (empty($methodAndClass[1])) ? $this->getDefaultClass() : $methodAndClass[1];
+    }
+
+    /**
+     * @param $pathUrl
+     * @return array
+     */
+    private function cutRouter($pathUrl)
+    {
+        return empty($this->_configurations['router'][$pathUrl]) ? null : explode('@', $this->_configurations['router'][$pathUrl]);
     }
 
     /**
@@ -189,30 +223,6 @@ class ReaderArrayConfiguration implements ReaderConfiguration
     private function hasParameters($router)
     {
         return preg_match_all('/{\w+}/', $router, $matches, PREG_OFFSET_CAPTURE);
-    }
-
-    /**
-     * @return array
-     */
-    private function mergeRouterAndPath()
-    {
-        $result = array();
-
-        if (count($this->_explodePathUrl) == count($this->_explodeRouter)) {
-            $result = array_filter($this->_explodeRouter, function ($value, $key) {
-                return ($this->_explodePathUrl[$key] === $this->_explodeRouter[$key] || $this->isParameter($this->_explodeRouter[$key]));
-            }, ARRAY_FILTER_USE_BOTH);
-        }
-        return $result;
-    }
-
-    /**
-     * @param string $parameter
-     * @return int
-     */
-    private function isParameter($parameter)
-    {
-        return preg_match('/{\w+}/', $parameter);
     }
 
     /**
