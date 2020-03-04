@@ -110,7 +110,7 @@ class ReaderArrayConfiguration implements ReaderConfiguration
     {
         $result = array();
 
-        if (count($this->_explodePathUrl) == count($this->_explodeRouter)) {
+        if (count($this->_explodePathUrl) === count($this->_explodeRouter)) {
             $result = array_filter($this->_explodeRouter, function ($value, $key) {
                 return ($this->_explodePathUrl[$key] === $this->_explodeRouter[$key] || $this->isParameter($this->_explodeRouter[$key]));
             }, ARRAY_FILTER_USE_BOTH);
@@ -142,6 +142,7 @@ class ReaderArrayConfiguration implements ReaderConfiguration
     /**
      * @param string $pathUrl
      * @return string
+     * @throws ClassNotFoundException
      */
     public function getClass($pathUrl)
     {
@@ -155,7 +156,18 @@ class ReaderArrayConfiguration implements ReaderConfiguration
      */
     private function cutRouter($pathUrl)
     {
-        return empty($this->_configurations['router'][$pathUrl]) ? null : explode('@', $this->_configurations['router'][$pathUrl]);
+        if (!empty($this->_configurations['router'][$pathUrl])) {
+            return explode('@', $this->_configurations['router'][$pathUrl]);
+        }
+        foreach ($this->_configurations['router'] as $key => $router) {
+            $regex = preg_replace('/{.*}/', '.*', $key);
+            if (preg_match("#^$regex$#", $pathUrl) !== 0) {
+                list($method, $class) = explode('@', $router);
+                list($class) = explode(':', $class);
+                return [$method, $class];
+            }
+        }
+        return [];
     }
 
     /**
@@ -230,10 +242,8 @@ class ReaderArrayConfiguration implements ReaderConfiguration
      */
     private function getVariables()
     {
-        $result = array_filter($this->_explodePathUrl, function ($value, $key) {
+        return array_filter($this->_explodePathUrl, function ($value, $key) {
             return ($this->isParameter($this->_explodeRouter[$key]));
         }, ARRAY_FILTER_USE_BOTH);
-
-        return $result;
     }
 }

@@ -9,9 +9,13 @@
 namespace Fake;
 
 
+use frontController\exceptions\ClassNotFoundException;
+use frontController\exceptions\MethodNotFoundException;
 use frontController\readers\ReaderArrayConfiguration;
+use frontController\test\fakes\FakeController;
+use PHPUnit_Framework_TestCase;
 
-class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
+class ReaderArrayConfigurationTest extends PHPUnit_Framework_TestCase
 {
 
     /**
@@ -19,6 +23,7 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      * Given:   path url
      * Return:  name method
      * When:    the method is specified in array config
+     * @throws MethodNotFoundException
      */
     public function testGetMethodGivenPathUrlReturnNameMethodWhenTheMethodIsSpecifiedInArrayConfig()
     {
@@ -30,10 +35,10 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
         ];
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $method = $reader->getMethod('/');
-        $this->assertTrue($method === 'add');
+        $this->assertSame('add', $method);
 
         $method = $reader->getMethod('/test/12');
-        $this->assertTrue($method === 'test2');
+        $this->assertSame('test2', $method);
     }
 
     /**
@@ -41,13 +46,14 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      * Given:   path url
      * Return:  name method default
      * When:    the method is not specified in array config
+     * @throws MethodNotFoundException
      */
     public function testGetMethodDefaultGivenPathUrlReturnNameMethodDefaultWhenTheMethodIsNotSpecifiedInArrayConfig()
     {
         $arrayConfiguration = ['router' => ['/' => 'add@frontController\test\fakes\FakeController'], 'default' => 'index@frontController\test\fakes\FakeController'];
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $methodDefault = $reader->getMethod('/add');
-        $this->assertTrue($methodDefault === 'index');
+        $this->assertSame('index', $methodDefault);
     }
 
     /**
@@ -69,13 +75,14 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      * Given:   path url
      * Return:  name class
      * When:    the class is specified in array config
+     * @throws ClassNotFoundException
      */
     public function testGetClassGivenPathUrlReturnNameClassWhenTheClassIsSpecifiedInArrayConfig()
     {
         $arrayConfiguration = ['router' => ['/' => 'add@frontController\test\fakes\FakeController']];
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $class = $reader->getClass('/');
-        $this->assertTrue($class == 'frontController\test\fakes\FakeController');
+        $this->assertSame(FakeController::class, $class);
     }
 
     /**
@@ -83,13 +90,19 @@ class ReaderArrayConfigurationTest extends \PHPUnit_Framework_TestCase
      * Given:   path url
      * Return:  name class default
      * When:    the class is not specified in array config
+     * @throws ClassNotFoundException
      */
     public function testGetClassDefaultGivenPathUrlReturnNameClassDefaultWhenTheClassIsNotSpecifiedInArrayConfig()
     {
         $arrayConfiguration = ['router' => ['/' => 'add@frontController\test\fakes\FakeController'], 'default' => 'index@Fake\FakeDefaultController'];
         $reader = new ReaderArrayConfiguration($arrayConfiguration);
         $classDefault = $reader->getClass('/add');
-        $this->assertTrue($classDefault == 'Fake\FakeDefaultController');
+        $this->assertSame($classDefault, 'Fake\FakeDefaultController');
+
+        $arrayConfiguration = ['router' => ['/test/{id}' => 'test2@frontController\test\fakes\FakeController:id']];
+        $reader = new ReaderArrayConfiguration($arrayConfiguration);
+        $class = $reader->getClass('/test/12');
+        $this->assertSame($class, FakeController::class);
     }
 
     /**
